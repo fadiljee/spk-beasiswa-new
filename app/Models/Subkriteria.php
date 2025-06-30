@@ -13,7 +13,7 @@ class Subkriteria extends Model
     protected $fillable = ['kriteria_id', 'nama', 'nilai'];
 
     // Relasi dengan Kriteria
-    
+
     public function kriteria()
     {
         return $this->belongsTo(Kriteria::class);

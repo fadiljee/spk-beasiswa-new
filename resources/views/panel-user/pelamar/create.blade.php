@@ -207,10 +207,19 @@
             <h3 class="section-title"><i class="bi bi-mortarboard-fill"></i>Informasi Akademik</h3>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label for="asal_universitas" class="form-label">Asal Universitas</label>
-                    <input type="text" name="asal_universitas" id="asal_universitas" class="form-control @error('asal_universitas') is-invalid @enderror" value="{{ old('asal_universitas') }}" required placeholder="Nama universitas asal">
-                    @error('asal_universitas')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                </div>
+    <label for="asal_universitas" class="form-label">Asal Universitas</label>
+    <input type="text" name="asal_universitas" id="asal_universitas" class="form-control @error('asal_universitas') is-invalid @enderror" value="{{ old('asal_universitas') }}" required placeholder="Contoh: Universitas Gadjah Mada">
+
+    {{-- INFORMASI TAMBAHAN --}}
+    <small class="form-text text-muted">
+        Mohon untuk tidak menyingkat nama universitas (contoh: tulis "Universitas Gadjah Mada" bukan "UGM").
+    </small>
+
+    @error('asal_universitas')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
                 <div class="col-md-6">
                     <label for="jurusan" class="form-label">Jurusan</label>
                     <input type="text" name="jurusan" id="jurusan" class="form-control @error('jurusan') is-invalid @enderror" value="{{ old('jurusan') }}" required placeholder="Contoh: Teknik Informatika">

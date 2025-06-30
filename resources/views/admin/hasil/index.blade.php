@@ -1,157 +1,267 @@
 @extends('admin.layout')
 
-@section('title', 'Hasil Akhir Peringkat')
-@section('page-title', 'Hasil Akhir Peringkat')
-@section('page-subtitle', 'Daftar final pelamar yang diurutkan berdasarkan skor tertinggi.')
+@section('title', 'Hasil Akhir & Perankingan')
+@section('page-title', 'Hasil Akhir & Perankingan')
 
-{{-- Style khusus untuk halaman ini --}}
+@section('content')
 <style>
-    .leaderboard-card {
+    /* === Google Font & Global Reset === */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+        --font-family: 'Inter', 'Poppins', sans-serif;
+        --primary-color: #4F46E5; /* Indigo */
+        --primary-hover: #4338CA;
+        --text-primary: #111827; /* Gray 900 */
+        --text-secondary: #6B7280; /* Gray 500 */
+        --bg-main: #F9FAFB; /* Gray 50 */
+        --bg-card: #FFFFFF;
+        --border-color: #E5E7EB; /* Gray 200 */
+        --highlight-bg: #F0FDF4; /* Green 50 */
+        --highlight-border: #22C55E; /* Green 500 */
+
+        --success-bg: #D1FAE5;
+        --success-text: #065F46;
+        --danger-bg: #FEE2E2;
+        --danger-text: #991B1B;
+        --neutral-bg: #F3F4F6;
+        --neutral-text: #374151;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: var(--font-family) !important;
+        background-color: var(--bg-main) !important;
+        color: var(--text-primary);
+    }
+
+    /* === Main Container (Card) === */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        background-color: var(--bg-card);
+        border-radius: 16px;
         border: 1px solid var(--border-color);
-        border-radius: 12px;
-        box-shadow: var(--card-shadow);
-        background-color: #fff;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         overflow: hidden;
     }
 
-    .leaderboard-header {
-        padding: 1.25rem 1.5rem;
-        background-color: #f9fafb;
+    .dashboard-content { padding: 2rem 2.5rem; }
+
+    /* === Header === */
+    .dashboard-header {
+        padding: 1.5rem 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
         border-bottom: 1px solid var(--border-color);
     }
 
-    .custom-table thead th {
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
+    .header-title { font-size: 1.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.8rem; }
+    .header-title .emoji { font-size: 1.5em; }
 
-    .custom-table tbody tr:hover {
-        background-color: var(--primary-light);
-    }
+    /* === Button Styles === */
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 10px; border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s ease-in-out; }
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-secondary { background-color: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background-color: #F9FAFB; border-color: #D1D5DB; }
 
-    .custom-table td {
-        padding: 1rem 1.5rem;
-    }
+    /* === Table Styling === */
+    .ranking-table { width: 100%; border-collapse: collapse; }
+    .ranking-table th, .ranking-table td { padding: 1.25rem 1rem; text-align: left; vertical-align: middle; }
+    .ranking-table thead th { color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border-color); }
+    .ranking-table tbody tr { border-bottom: 1px solid var(--border-color); transition: background-color 0.2s ease; }
+    .ranking-table tbody tr:last-child { border-bottom: none; }
+    .ranking-table tbody tr:hover { background-color: var(--bg-main); }
 
-    .pelamar-info {
-        display: flex;
-        align-items: center;
-    }
+    /* --- Special Cells & Components --- */
+    .rank-cell { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); }
+    .name-cell { font-weight: 600; }
+    .calculation-text { font-family: monospace; color: var(--text-secondary); font-size: 0.9rem; }
+    .top-rank { background-color: var(--highlight-bg) !important; border-left: 4px solid var(--highlight-border); }
 
-    .pelamar-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 1rem;
-        background-color: var(--primary-light);
-    }
+    /* --- Badges --- */
+    .badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.3px; }
+    .badge-score { background-color: #eef2ff; color: var(--primary-color); }
+    .badge-success { background-color: var(--success-bg); color: var(--success-text); }
+    .badge-danger { background-color: var(--danger-bg); color: var(--danger-text); }
+    .badge-neutral { background-color: var(--neutral-bg); color: var(--neutral-text); }
 
-    .pelamar-nama {
-        font-weight: 600;
-        color: var(--text-dark);
-    }
+    /* --- Custom Form Select --- */
+    .custom-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem 2.5rem 0.5rem 0.75rem; font-size: 0.9rem; width: 100%; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .custom-select:hover { border-color: #D1D5DB; }
+    .custom-select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px #eef2ff; }
 
-    .skor-badge {
-        font-size: 1rem;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        border-radius: 999px;
-        background-color: var(--primary-light);
-        color: var(--primary-color);
-    }
+    /* --- Empty State --- */
+    .empty-state { text-align: center; padding: 5rem 2rem; }
+    .empty-state svg { width: 60px; height: 60px; color: #D1D5DB; margin-bottom: 1.5rem; }
+    .empty-state-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .empty-state-subtitle { color: var(--text-secondary); max-width: 400px; margin: 0 auto; }
 
-    .rank-cell {
-        font-weight: 700;
-        font-size: 1.1rem;
+    /* === PENAMBAHAN: CSS UNTUK PAGINASI === */
+    .pagination-container {
+        padding: 1.5rem 2.5rem;
+        background-color: #F9FAFB;
     }
-
-    /* Medali untuk Top 3 */
-    .rank-icon {
-        font-size: 1.75rem;
+    .pagination {
+        justify-content: center;
+        margin-bottom: 0;
     }
-    .rank-1 .rank-icon { color: #ffd700; } /* Gold */
-    .rank-2 .rank-icon { color: #c0c0c0; } /* Silver */
-    .rank-3 .rank-icon { color: #cd7f32; } /* Bronze */
+    .page-item .page-link {
+        border-radius: 8px !important;
+        margin: 0 3px;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-weight: 500;
+        background-color: white;
+    }
+    .page-item .page-link:hover {
+        background-color: #F3F4F6;
+        border-color: #D1D5DB;
+        z-index: 2;
+    }
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+        z-index: 3;
+    }
+    .page-item.disabled .page-link {
+        color: #D1D5DB;
+        background-color: #fff;
+        border-color: var(--border-color);
+    }
 </style>
 
-@section('content')
-<div class="leaderboard-card">
-    <div class="leaderboard-header d-flex flex-wrap justify-content-between align-items-center">
-      <h5 class="mb-0 fw-bold">Papan Peringkat Final</h5>
-
-      {{-- Ganti 'perhitungan.hasil_akhir.pdf' dengan route yang benar jika berbeda --}}
-      <a href="{{ route('perhitungan.hasil_akhir.pdf') }}" target="_blank" class="btn btn-primary">
-        <i class="fas fa-print me-2"></i>Cetak Hasil
-      </a>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="header-title">
+            <span class="emoji">🏆</span>
+            <div>
+                <h1 class="header-title" style="font-size: 1.5rem; margin: 0;">Hasil Akhir & Perankingan</h1>
+                <p style="font-size: 0.95rem; font-weight: 400; color: var(--text-secondary); margin-top: 0.25rem;">Manajemen status kelulusan berdasarkan nilai akhir.</p>
+            </div>
+        </div>
+        <div class="leaderboard-actions">
+            <a href="{{ route('hasilAkhir.pdf') }}" class="btn btn-secondary" target="_blank">
+                <i class="fas fa-file-pdf"></i> Export ke PDF
+            </a>
+            <form action="{{ route('hasilAkhir.kirimEmail') }}" method="POST" style="display:inline;">
+                @csrf
+                <button type="submit" class="btn btn-primary" onclick="return confirm('Kirim hasil akhir ke semua pelamar?')">
+                    <i class="fas fa-envelope"></i> Kirim ke Email Pelamar
+                </button>
+            </form>
+            <form action="{{ route('hasilAkhir.kirimWa') }}" method="POST" style="display:inline;">
+    @csrf
+    <button type="submit" class="btn btn-success" onclick="return confirm('Kirim hasil akhir ke WhatsApp semua pelamar?')">
+        <i class="fab fa-whatsapp"></i> Kirim ke WhatsApp Pelamar
+    </button>
+</form>
+        </div>
     </div>
 
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table custom-table align-middle mb-0">
-          <thead>
-            <tr class="text-center">
-              <th style="width: 10%;">Peringkat</th>
-              <th class="text-start">Pelamar</th>
-              <th style="width: 25%;">Skor Akhir</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($hasilAkhir as $index => $data)
-              <tr class="rank-{{ $index + 1 }}">
-                <td class="text-center rank-cell">
-                  {{-- Tampilkan ikon medali untuk top 3 --}}
-                  @if ($index < 3)
-                    <i class="fas fa-medal rank-icon"></i>
-                  @else
-                    {{ $index + 1 }}
-                  @endif
-                </td>
-                <td class="text-start">
-                  <div class="pelamar-info">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($data['pelamar']) }}&background=eef2ff&color=4f46e5"
-                         alt="Avatar" class="pelamar-avatar">
-                    <span class="pelamar-nama">{{ $data['pelamar'] }}</span>
-                  </div>
-                </td>
-              
-               <td class="text-center">
-                <span class="skor-badge">
-                    {{ rtrim(rtrim(number_format($data['skor'], 3), '0'), '.') }}
-                </span>
-            </td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="3" class="text-center py-5">
-                  <i class="fas fa-info-circle fs-3 text-muted mb-3"></i>
-                  <h6 class="text-muted">Data Hasil Peringkat Belum Tersedia</h6>
-                  <p class="text-muted small">Silakan lengkapi data penilaian terlebih dahulu.</p>
-                </td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <div class="dashboard-content">
+        @if(session('success'))
+            <div class="alert alert-success mb-4">{{ session('success') }}</div>
+        @endif
 
-    <!-- Tombol Kirim Hasil via Email dan WhatsApp -->
-    <div class="d-flex justify-content-between mt-4">
-        <form action="{{ route('kirim.email') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-outline-primary">
-                <i class="fas fa-envelope me-2"></i>Kirim Hasil via Email
-            </button>
+        <form action="{{ route('hasilAkhir.simpanStatus') }}" method="POST">
+        @csrf
+        <div class="table-responsive">
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 5%;">Rank</th>
+                        <th>Nama Pelamar</th>
+                        <th>Perhitungan</th>
+                        <th>Nilai Akhir</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Tahun</th>
+                        <th style="min-width: 150px;">Opsi Kelulusan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($hasilAkhir as $row)
+                    @php
+                        $pelamar = \App\Models\DataPelamar::where('nama_lengkap', $row['pelamar'])->first();
+                    @endphp
+                    <tr class="{{ $row['ranking'] == 1 ? 'top-rank' : '' }}">
+                        <td class="rank-cell text-center">{{ $row['ranking'] }}</td>
+                        <td class="name-cell">{{ $row['pelamar'] }}</td>
+                        <td>
+                            <span class="calculation-text">{{ $row['calculation'] }}</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-score">{{ number_format($row['V'], 2) }}</span>
+                        </td>
+                        <td class="text-center">
+                            @if($pelamar?->status_lulus == 'lulus')
+                                <span class="badge badge-success">Lulus</span>
+                            @elseif($pelamar?->status_lulus == 'tidak_lulus')
+                                <span class="badge badge-danger">Tidak Lulus</span>
+                            @else
+                                <span class="badge badge-neutral">Belum Ada</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                             {{ $pelamar?->status_lulus == 'lulus' ? $pelamar->tahun_lulus : ($pelamar?->status_lulus == 'tidak_lulus' ? $pelamar->tahun_tidak_lulus : '-') }}
+                        </td>
+                        <td>
+                            @if($pelamar)
+                                <input type="hidden" name="pelamar_id[]" value="{{ $pelamar->id }}">
+                                <select name="status_lulus[]" class="custom-select">
+                                    <option value="" {{ $pelamar->status_lulus == null ? 'selected' : '' }}>Pilih Status</option>
+                                    <option value="lulus" {{ $pelamar->status_lulus == 'lulus' ? 'selected' : '' }}>Lulus</option>
+                                    <option value="tidak_lulus" {{ $pelamar->status_lulus == 'tidak_lulus' ? 'selected' : '' }}>Tidak Lulus</option>
+                                </select>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <h3 class="empty-state-title">Data Belum Ditemukan</h3>
+                                <p class="empty-state-subtitle">Silakan proses data penilaian terlebih dahulu. Hasil perankingan akan muncul di sini setelah data siap.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            {{-- Menampilkan informasi jumlah data --}}
+            <div class="text-muted" style="font-size: 0.9rem;">
+                @if ($hasilAkhir->total() > 0)
+                    Menampilkan {{ $hasilAkhir->firstItem() }} - {{ $hasilAkhir->lastItem() }} dari {{ $hasilAkhir->total() }} hasil
+                @else
+                    Tidak ada data untuk ditampilkan
+                @endif
+            </div>
+
+            {{-- Tombol simpan hanya muncul jika ada data --}}
+            @if($hasilAkhir->total() > 0)
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Simpan Status Kelulusan
+                </button>
+            @endif
+        </div>
         </form>
-
-        <form action="{{ route('kirim.whatsapp') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-outline-success">
-                <i class="fab fa-whatsapp me-2"></i>Kirim Hasil via WhatsApp
-            </button>
-        </form>
     </div>
+
+    {{-- PENAMBAHAN: Navigasi Paginasi --}}
+    @if ($hasilAkhir->hasPages())
+    <div class="pagination-container">
+        {{ $hasilAkhir->links('pagination::bootstrap-5') }}
+    </div>
+    @endif
 </div>
 @endsection

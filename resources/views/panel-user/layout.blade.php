@@ -180,7 +180,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-             <h3><a href="{{ route('user.beranda') }}" class="text-decoration-none text-white"><i class="fas fa-home me-2"></i>Beranda User</a></h3>
+             <h3><a href="#" class="text-decoration-none text-white"><i class="fas fa-home me-2"></i>Beranda User</a></h3>
         </div>
 
         <nav class="sidebar-nav">

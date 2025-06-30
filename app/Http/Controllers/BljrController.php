@@ -43,8 +43,7 @@ class BljrController extends Controller
     }
 
     public function logout()
-    {
-        Auth::logout();
+    {   
         return redirect()->route('loginadmin');
     }
 }

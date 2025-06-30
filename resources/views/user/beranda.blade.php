@@ -166,31 +166,50 @@
 <section id="testimonials" class="section-padding">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="section-title">Apa Kata Alumni?</h2>
-            <p class="section-subtitle">Dengarkan cerita sukses dari mereka yang telah merasakan manfaat program ini.</p>
+            <h2 class="section-title">Apa Kata Kampus?</h2>
+            <p class="section-subtitle">Dengarkan pandangan dari mitra universitas kami tentang kolaborasi dengan INTACT.</p>
         </div>
         <div class="row g-4">
             @php
+            // Konten diubah menjadi testimoni dari perwakilan kampus
             $testimonials = [
-                ['name' => 'Ahmad Prasetyo', 'major' => 'M.Sc. in AI, NTU', 'quote' => 'Program ini benar-benar mengubah hidup saya. Dukungan finansial dan kesempatan magang membuka jalan karir internasional yang tidak pernah saya bayangkan sebelumnya.'],
-                ['name' => 'Siti Nurhaliza', 'major' => 'B.Eng. in EE, NCKU', 'quote' => 'Awalnya saya ragu dengan kemampuan bahasa, tapi dukungan dari INTACT Base sangat membantu. Kini saya fasih berbahasa Mandarin dan bekerja di perusahaan teknologi ternama.'],
-                ['name' => 'Budi Santoso', 'major' => 'Ph.D. in CS, NYCU', 'quote' => 'Fasilitas riset di Taiwan luar biasa. Beasiswa ini memungkinkan saya untuk fokus pada penelitian tanpa khawatir soal biaya. Sangat direkomendasikan!']
+                [
+                    'name' => 'Prof. Dr. Anugerah Pekerti',
+                    'position' => 'Kepala Kantor Urusan Internasional, Universitas Indonesia',
+                    'quote' => 'Kolaborasi dengan INTACT telah secara signifikan meningkatkan kualitas dan jumlah mahasiswa internasional kami dari Indonesia. Profesionalisme dan dukungan yang mereka berikan patut diacungi jempol.',
+                    'rating' => 5
+                ],
+                [
+                    'name' => 'Direktorat Kemitraan Global',
+                    'position' => 'Institut Teknologi Bandung (ITB)',
+                    'quote' => 'INTACT berhasil membekali calon mahasiswa dengan fundamental yang kuat. Lulusan program mereka tidak hanya unggul secara akademis, tetapi juga memiliki soft skill yang kami cari pada pemimpin masa depan.',
+                    'rating' => 5
+                ],
+                [
+                    'name' => 'Office of International Affairs',
+                    'position' => 'National Taiwan University (NTU)',
+                    'quote' => 'Kami memandang INTACT sebagai mitra strategis dalam menjaring talenta digital dari Indonesia. Program persiapan mereka terbukti sangat efektif dalam memastikan kesuksesan mahasiswa di lingkungan akademik global.',
+                    'rating' => 5
+                ]
             ];
             @endphp
-            @foreach($testimonials as $t)
+
+            @foreach($testimonials as $testimonial)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                 <div class="card testimonial-card h-100 p-4">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=1e40af&color=fff" class="testimonial-img me-3" alt="{{ $t['name'] }}">
+                            {{-- Avatar akan menggunakan inisial dari nama kampus/departemen --}}
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($testimonial['name']) }}&background=1e40af&color=fff&font-size=0.4" class="testimonial-img me-3" alt="Logo {{ $testimonial['position'] }}">
                             <div>
-                                <h6 class="fw-bold mb-0">{{ $t['name'] }}</h6>
-                                <small class="text-muted">{{ $t['major'] }}</small>
+                                <h6 class="fw-bold mb-0">{{ $testimonial['name'] }}</h6>
+                                {{-- Mengganti 'major' dengan 'position' --}}
+                                <small class="text-muted">{{ $testimonial['position'] }}</small>
                             </div>
                         </div>
-                        <p class="testimonial-quote">"{{ $t['quote'] }}"</p>
+                        <p class="testimonial-quote">"{{ $testimonial['quote'] }}"</p>
                         <div class="testimonial-rating">
-                            @for ($i = 0; $i < 5; $i++) <i class="bi bi-star-fill"></i> @endfor
+                            @for ($i = 0; $i < $testimonial['rating']; $i++) <i class="bi bi-star-fill"></i> @endfor
                         </div>
                     </div>
                 </div>
@@ -201,7 +220,7 @@
 </section>
 
 {{-- FAQ Section --}}
-<section id="faq" class="section-padding" style="background: var(--light-bg);">
+{{-- <section id="faq" class="section-padding" style="background: var(--light-bg);">
     <div class="container">
          <div class="text-center mb-5" data-aos="fade-up">
             <h2 class="section-title">Pertanyaan Umum (FAQ)</h2>
@@ -230,7 +249,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 {{-- Application Process Section (Isi tetap sama, style dari layout) --}}
 <section id="apply" class="section-padding">

@@ -22,6 +22,9 @@ class DataPelamar extends Model
         'ipk',  // Menambahkan IPK
         'transkrip_nilai_path',  // Menambahkan Transkrip Nilai
         'ijazah_path',  // Menambahkan Ijazah
+        'status_lulus',
+        'tahun_lulus',
+        'tahun_tidak_lulus',
     ];
 
     protected $casts = [
@@ -45,7 +48,7 @@ public function beasiswas()
     {
         return $this->hasMany(Penilaian::class, 'pelamar_id');
     }
-    
+
 public function universitas_beasiswa_1()
 {
     return $this->belongsTo(Beasiswa::class, 'universitas_beasiswa_id_1');

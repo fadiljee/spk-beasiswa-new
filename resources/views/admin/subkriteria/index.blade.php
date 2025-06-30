@@ -1,7 +1,7 @@
 @extends('admin.layout')
 @section('title', 'Data Sub Kriteria')
 
-@push('styles')
+
 <style>
     .gradient-bg {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -280,7 +280,7 @@
         100% { transform: rotate(360deg); }
     }
 </style>
-@endpush
+
 
 @section('content')
 <div class="content-wrapper">
@@ -455,7 +455,8 @@
                                                placeholder="Masukkan nama sub kriteria"
                                                required>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    {{-- PERUBAHAN 1: Kolom nilai diubah dari col-md-4 menjadi col-md-3 --}}
+                                    <div class="col-md-3 mb-3">
                                         <label for="nilai_{{ $kriteria->id }}" class="form-label fw-medium">
                                             <i class="fas fa-star me-1"></i>Nilai
                                         </label>
@@ -468,8 +469,8 @@
                                                placeholder="1-100"
                                                required>
                                     </div>
-                                    <div class="col-md-2 mb-3">
-                                        <label class="form-label">&nbsp;</label>
+                                    {{-- PERUBAHAN 2: Kolom tombol diubah dari col-md-2 menjadi col-md-3 --}}
+                                    <div class="col-md-3 mb-3 d-flex align-items-end">
                                         <input type="hidden" name="kriteria_id" value="{{ $kriteria->id }}">
                                         <button type="submit" class="btn btn-modern btn-gradient w-100">
                                             <i class="fas fa-save me-1"></i>

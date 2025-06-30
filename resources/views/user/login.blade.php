@@ -267,9 +267,6 @@
         </div>
       </form>
 
-      <div class="forgot-password">
-        <a href="#">Lupa password?</a>
-      </div>
 
       <div class="footer-text">
         &copy; 2025 SPK. All rights reserved.

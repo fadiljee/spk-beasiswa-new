@@ -26,8 +26,18 @@
             </div>
 
             <div class="form-group">
-              <label for="bobot">Bobot</label>
-              <input type="number" name="bobot" id="bobot" class="form-control" value="{{ $kriteria->bobot }}" min="0" max="100"  required>
+              <label for="bobot">Bobot (dalam desimal, contoh: 0.35)</label>
+              <input
+                type="number"
+                name="bobot"
+                id="bobot"
+                class="form-control"
+                step="0.01"
+                min="0"
+                max="1"
+                value="{{ $kriteria->bobot }}"
+                placeholder="Masukkan bobot desimal, contoh: 0.35"
+                required>
             </div>
 
             <div class="form-group">

@@ -11,11 +11,13 @@ class Penilaian extends Model
 
     protected $table = 'penilaian';
 
-    protected $fillable = [
-        'pelamar_id',
-        'subkriteria_id',
-        'nilai',
-    ];
+protected $fillable = [
+    'pelamar_id',
+    'kriteria_id',
+    'subkriteria_id',
+    'nilai',
+];
+
 
     // Relasi ke DataPelamar
     public function pelamar()

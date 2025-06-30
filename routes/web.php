@@ -10,7 +10,7 @@ use App\Http\Controllers\DataUserController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PelamarController;
 use App\Http\Controllers\UserController\DashboardController;
-
+use App\Http\Controllers\HasilAkhirController;
 use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\BeasiswaController;
 use App\Http\Controllers\dataPelamarController;
@@ -30,7 +30,7 @@ Route::get('/register', function () {
 
 // Panel User
 Route::get('/panel-user', [LoginController::class, 'dashboarduser'])->name('pendafaran.user');
-Route::get('/panel-user/hasil-akhir', [DashboarController::class, 'hasilAkhir'])->name('hasil-akhir');
+Route::get('/panel-user/hasil-akhir', [PerhitunganController::class, 'hasilAkhirUser'])->name('hasil-akhir');
 Route::post('/userlogout', [DashboarController::class, 'logout'])->name('user.logout');
 // Route::get('mahasiswa/edit', [DashboarController::class, 'edit'])->name('usermahasiswa.edit');
 // Route::put('mahasiswa/update/{id}', [DashboarController::class, 'update'])->name('usermahasiswa.update');
@@ -166,14 +166,24 @@ Route::middleware(LoggedIn::class)->group(function () {
     //penilian
 
         Route::get('/penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
-        Route::get('/penilaian/create/{pelamar_id}', [PenilaianController::class, 'create'])->name('penilaian.create');
-        Route::post('/penilaian/store', [PenilaianController::class, 'store'])->name('penilaian.store');
+        Route::get('/penilaian/create/{pelamar}', [PenilaianController::class, 'create'])->name('penilaian.create');
+        Route::get('/penilaian/{pelamar}/edit', [PenilaianController::class, 'edit'])->name('penilaian.edit');
+Route::put('/penilaian/{pelamar}', [PenilaianController::class, 'update'])->name('penilaian.update');
+
+    Route::post('/penilaian/store', [PenilaianController::class, 'store'])->name('penilaian.store');
         Route::get('/get-subkriteria/{kriteria_id}', [PenilaianController::class, 'getSubkriteria']);
 
     // Perhitungan
     Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan.index');
 
     Route::get('/perhitungan/hasil-akhir', [PerhitunganController::class, 'hasilAkhir'])->name('hasilakhir');
+    Route::get('/hasil-akhir/excel', [PerhitunganController::class, 'exportExcel'])->name('hasilAkhir.excel');
+    Route::get('/hasil-akhir/pdf', [PerhitunganController::class, 'exportPdf'])->name('hasilAkhir.pdf');
+
+
+    // Simpan Status
+    Route::post('/hasil-akhir/simpan-status', [PerhitunganController::class, 'simpanStatus'])->name('hasilAkhir.simpanStatus');
+
 
 
     // Data User
@@ -198,6 +208,9 @@ Route::middleware(LoggedIn::class)->group(function () {
     Route::post('/kirim/hasil/email', [PerhitunganController::class, 'kirimHasilKeEmail'])->name('kirim.email');
 Route::post('/kirim/hasil/whatsapp', [PerhitunganController::class, 'kirimHasilKeWhatsApp'])->name('kirim.whatsapp');
 
+
+Route::post('/hasil-akhir/kirim-email', [PerhitunganController::class, 'kirimEmailKePelamar'])->name('hasilAkhir.kirimEmail');
+Route::post('/hasil-akhir/kirim-wa', [PerhitunganController::class, 'kirimWa'])->name('hasilAkhir.kirimWa');
 
 
 

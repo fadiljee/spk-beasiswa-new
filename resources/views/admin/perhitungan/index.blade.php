@@ -260,26 +260,10 @@
   }
 </style>
 
-<div class="container-fluid py-4">
-  <div class="process-flow">
-    <div class="process-step active">
-      <div class="step-icon"><i class="fas fa-table"></i></div>
-      <div class="step-title">Matriks</div>
-    </div>
-    <div class="process-step active">
-      <div class="step-icon"><i class="fas fa-balance-scale"></i></div>
-      <div class="step-title">Normalisasi</div>
-    </div>
-    <div class="process-step active">
-      <div class="step-icon"><i class="fas fa-weight-hanging"></i></div>
-      <div class="step-title">Pembobotan</div>
-    </div>
-    <div class="process-step active">
-      <div class="step-icon"><i class="fas fa-trophy"></i></div>
-      <div class="step-title">Hasil Akhir</div>
-    </div>
-  </div>
 
+<div class="container-fluid py-4">
+
+  {{-- Matriks Keputusan --}}
   <div class="matrix-card">
     <div class="matrix-header decision">
       <div class="matrix-icon"><i class="fas fa-table"></i></div>
@@ -300,9 +284,9 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($matriksKeputusan as $index => $data)
+          @foreach ($matriksKeputusan as $pid => $data)
             <tr>
-              <td class="cell-no">{{ $index + 1 }}</td>
+              <td class="cell-no">{{ $loop->iteration }}</td>
               <td class="cell-name">{{ $data['pelamar'] }}</td>
               @foreach ($kriterias as $kriteria)
                 <td>{{ $data['nilai'][$kriteria->nama_kriteria] ?? '-' }}</td>
@@ -314,12 +298,13 @@
     </div>
   </div>
 
+  {{-- Matriks Normalisasi --}}
   <div class="matrix-card">
     <div class="matrix-header normalized">
       <div class="matrix-icon"><i class="fas fa-balance-scale"></i></div>
       <div>
-        <h4 class="matrix-title">Matriks Ternormalisasi (R)</h4>
-        <p class="matrix-subtitle">Hasil normalisasi data menggunakan formula SAW.</p>
+        <h4 class="matrix-title">Matriks Normalisasi (R)</h4>
+        <p class="matrix-subtitle">Normalisasi data sesuai jenis kriteria (Benefit/Cost).</p>
       </div>
     </div>
     <div class="matrix-body">
@@ -334,14 +319,14 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($matriksKeputusan as $index => $data)
+          @foreach ($matriksKeputusan as $pid => $data)
             <tr>
-              <td class="cell-no">{{ $index + 1 }}</td>
+              <td class="cell-no">{{ $loop->iteration }}</td>
               <td class="cell-name">{{ $data['pelamar'] }}</td>
               @foreach ($kriterias as $kriteria)
                 <td>
                   <span class="value-pill pill-normalized">
-                    {{ number_format($normalizedMatrix[$index]['nilai'][$kriteria->nama_kriteria] ?? 0, 2) }}
+                    {{ number_format($normalizedMatrix[$pid]['nilai'][$kriteria->nama_kriteria] ?? 0, 2) }}
                   </span>
                 </td>
               @endforeach
@@ -352,34 +337,38 @@
     </div>
   </div>
 
+  {{-- Matriks Terbobot --}}
   <div class="matrix-card">
     <div class="matrix-header weighted">
       <div class="matrix-icon"><i class="fas fa-weight-hanging"></i></div>
       <div>
         <h4 class="matrix-title">Matriks Terbobot (W)</h4>
-        <p class="matrix-subtitle">Perkalian nilai ternormalisasi dengan bobot kriteria.</p>
+        <p class="matrix-subtitle">Perkalian nilai normalisasi dengan bobot (langsung dikali, tanpa dibagi 100).</p>
       </div>
     </div>
-     <div class="matrix-body">
+    <div class="matrix-body">
       <table class="matrix-table">
         <thead>
           <tr>
             <th>No</th>
             <th style="text-align: left;">Nama Pelamar</th>
             @foreach ($kriterias as $kriteria)
-              <th>{{ $kriteria->nama_kriteria }} (Bobot: {{ $kriteria->bobot }})</th>
+              <th>
+                {{ $kriteria->nama_kriteria }}
+                <span class="badge bg-primary">Bobot: {{ number_format($kriteria->bobot, 2, ',', '.') }}</span>
+              </th>
             @endforeach
           </tr>
         </thead>
         <tbody>
-          @foreach ($matriksKeputusan as $index => $data)
+          @foreach ($matriksKeputusan as $pid => $data)
             <tr>
-              <td class="cell-no">{{ $index + 1 }}</td>
+              <td class="cell-no">{{ $loop->iteration }}</td>
               <td class="cell-name">{{ $data['pelamar'] }}</td>
               @foreach ($kriterias as $kriteria)
                 <td>
                   <span class="value-pill pill-weighted">
-                    {{ number_format($weightedMatrix[$index]['nilai'][$kriteria->nama_kriteria] ?? 0, 2) }}
+                    {{ number_format($weightedMatrix[$pid]['nilai'][$kriteria->nama_kriteria] ?? 0, 2) }}
                   </span>
                 </td>
               @endforeach
@@ -390,69 +379,86 @@
     </div>
   </div>
 
-    <div class="matrix-card">
-        <div class="matrix-header calculation">
-        <div class="matrix-icon"><i class="fas fa-trophy"></i></div>
-        <div>
-            <h4 class="matrix-title">Hasil Akhir & Perankingan</h4>
-            <p class="matrix-subtitle">Penjumlahan nilai terbobot untuk menentukan skor akhir.</p>
-        </div>
-        </div>
-        <div class="matrix-body">
-        <table class="matrix-table" id="final-rank-table">
-            <thead>
+  {{-- Nilai Preferensi (V) --}}
+  <div class="matrix-card">
+    <div class="matrix-header calculation">
+      <div class="matrix-icon"><i class="fas fa-calculator"></i></div>
+      <div>
+        <h4 class="matrix-title">Menghitung Nilai Preferensi (V)</h4>
+        <p class="matrix-subtitle">Penjumlahan seluruh nilai terbobot untuk setiap pelamar (sesuai Excel).</p>
+      </div>
+    </div>
+    <div class="matrix-body">
+      <table class="matrix-table">
+        <thead>
           <tr>
-            <th>Rank</th>
-            <th style="text-align: left;">Nama Pelamar</th>
-            <th style="min-width: 300px;">Detail Perhitungan</th>
-            <th>Nilai Akhir</th>
+            <th>No</th>
+            <th>Nama Pelamar</th>
+            <th>EPT</th>
+            <th>IPK</th>
+            <th>Jurusan</th>
+            <th>Usia</th>
+            <th>V</th>
+            <th>Ranking</th>
           </tr>
         </thead>
         <tbody>
-          {{-- Logika ini sebaiknya dilakukan di Controller, tapi untuk display, kita siapkan di sini --}}
-          @php
-            $finalScores = [];
-            foreach ($matriksKeputusan as $index => $data) {
-                $total = 0;
-                $calculationString = '';
-                foreach ($weightedMatrix[$index]['nilai'] as $kriteria_name => $nilai_terbobot) {
-                    $total += $nilai_terbobot;
-                    $calculationString .= number_format($nilai_terbobot, 2) . ' + ';
-                }
-                $finalScores[] = [
-                    'pelamar' => $data['pelamar'],
-                    'skor' => $total,
-                    'calculation' => rtrim($calculationString, ' + ')
-                ];
-            }
-            // Sort by score descending
-            usort($finalScores, function($a, $b) {
-                return $b['skor'] <=> $a['skor'];
-            });
-          @endphp
-
-          @foreach ($finalScores as $index => $result)
-            <tr class="{{ $index === 0 ? 'top-rank' : '' }}">
-              <td class="cell-no">{{ $index + 1 }}</td>
-              <td class="cell-name">{{ $result['pelamar'] }}</td>
-              <td>
-                <div class="calculation-text" title="Click to copy">
-                  {{ $result['calculation'] }}
-                </div>
-              </td>
-             <td>
-                <span class="final-score">
-                    {{ rtrim(rtrim(number_format($result['skor'], 3), '0'), '.') }}
-                </span>
-            </td>
-
-            </tr>
+          @foreach ($nilaiPreferensi as $i => $row)
+          <tr>
+            <td>{{ $i + 1 }}</td>
+            <td>{{ $row['pelamar'] }}</td>
+            <td>{{ number_format($row['ept'], 2) }}</td>
+            <td>{{ number_format($row['ipk'], 2) }}</td>
+            <td>{{ number_format($row['jurusan'], 2) }}</td>
+            <td>{{ number_format($row['usia'], 2) }}</td>
+            <td><b>{{ number_format($row['V'], 2) }}</b></td>
+            <td>{{ $row['ranking'] }}</td>
+          </tr>
           @endforeach
         </tbody>
       </table>
     </div>
   </div>
+
+  {{-- Hasil Akhir dan Ranking --}}
+<div class="matrix-card">
+  <div class="matrix-header calculation">
+    <div class="matrix-icon"><i class="fas fa-trophy"></i></div>
+    <div>
+      <h4 class="matrix-title">Hasil Akhir & Perankingan</h4>
+      <p class="matrix-subtitle">Penjumlahan seluruh nilai preferensi (V) untuk ranking (sama seperti Excel).</p>
+    </div>
+  </div>
+  <div class="matrix-body">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th style="text-align:left;">Nama Pelamar</th>
+          <th>Detail Perhitungan</th>
+          <th>Nilai Akhir (V)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($nilaiPreferensi as $row)
+        <tr class="{{ $row['ranking'] === 1 ? 'top-rank' : '' }}">
+          <td class="cell-no">{{ $row['ranking'] }}</td>
+          <td class="cell-name">{{ $row['pelamar'] }}</td>
+          <td>
+            <div class="calculation-text">{{ $row['calculation'] }} = <b>{{ number_format($row['V'], 2) }}</b></div>
+          </td>
+          <td>
+            <span class="final-score">{{ number_format($row['V'], 2) }}</span>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
 </div>
+
+</div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -475,7 +481,6 @@ document.addEventListener('DOMContentLoaded', function() {
         cell.addEventListener('click', function() {
             const textToCopy = this.textContent.trim();
             navigator.clipboard.writeText(textToCopy).then(() => {
-                // Simple feedback
                 const originalText = this.innerHTML;
                 this.innerHTML = 'Copied!';
                 this.style.color = 'var(--primary-color)';

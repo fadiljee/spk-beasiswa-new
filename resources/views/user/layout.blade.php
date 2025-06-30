@@ -78,7 +78,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#programs">Program</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#benefits">Benefit</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#testimonials">Testimoni</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#faq">FAQ</a></li>
+                    
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#apply">Cara Daftar</a></li>
                 </ul>
                 <a href="{{ route('loginuser') }}" class="btn btn-custom-primary">Login / Daftar</a>
