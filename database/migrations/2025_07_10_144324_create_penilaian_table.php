@@ -11,6 +11,7 @@ class CreatePenilaianTable extends Migration
         Schema::create('penilaian', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pelamar_id')->constrained('data_pelamar')->onDelete('cascade');
+            $table->foreignId('kriteria_id')->constrained('kriterias')->onDelete('cascade');
             $table->foreignId('subkriteria_id')->constrained('subkriteria')->onDelete('cascade');
             $table->integer('nilai');
             $table->timestamps();
