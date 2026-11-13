@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         DB::table('admin')->upsert(
             [
                 [
-                    'email' => 'admin@example.com',
+                    'email' => 'fadil@gmail.com',
                     'password' => $defaultPassword,
                     'created_at' => $now,
                     'updated_at' => $now,

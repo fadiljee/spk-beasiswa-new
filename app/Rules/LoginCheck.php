@@ -38,7 +38,8 @@ class LoginCheck implements ValidationRule
             }
         }
         if($loginStatus){
-            $ambilUser = UserModel::where('email',$email)-> first();
+            $ambilUser = UserModel::where('email',$email)->first();
+            $this->request->session()->regenerate();
             Session::put('loginStatus',TRUE);
             Session::put('ambilUser',$ambilUser);
         } else {

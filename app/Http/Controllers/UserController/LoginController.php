@@ -14,10 +14,16 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     public function login() {
-    return view('user.login');
-}
+        if (session('mahasiswa_id')) {
+            return redirect()->route('pendafaran.user');
+        }
+        return view('user.login');
+    }
 
 public function register() {
+    if (session('mahasiswa_id')) {
+        return redirect()->route('pendafaran.user');
+    }
     return view('user.register');
 }
 public function dashboarduser()
@@ -62,7 +68,7 @@ public function proseslogin(Request $request)
     $mahasiswa = Mahasiswa::where('nim', $request->nim)->first();
 
     if ($mahasiswa && Hash::check($request->password, $mahasiswa->password)) {
-        // ✅ Simpan session manual
+        $request->session()->regenerate();
         session([
             'mahasiswa_id' => $mahasiswa->id,
             'mahasiswa_nama' => $mahasiswa->nama,
@@ -113,13 +119,20 @@ public function update(Request $request)
 
     $user->update($validated);
 
+    session([
+        'mahasiswa_nama' => $user->nama,
+        'mahasiswa_nim' => $user->nim,
+        'mahasiswa_jurusan' => $user->jurusan,
+    ]);
+
     return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');
 }
 
 
 public function logout(Request $request)
 {
-    $request->session()->flush(); // ⬅️ hapus semua session
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
     return redirect()->route('user.beranda')->with('success', 'Anda telah berhasil logout.');
 }
 

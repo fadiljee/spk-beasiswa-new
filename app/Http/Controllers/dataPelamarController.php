@@ -17,6 +17,12 @@ class DataPelamarController extends Controller
 
     public function store(Request $request)
     {
+        if (!config('beasiswa.pendaftaran_dibuka')) {
+            return redirect()->back()->withErrors([
+                'pendaftaran' => 'Pendaftaran beasiswa belum dibuka saat ini.',
+            ]);
+        }
+
         // Validasi inputan dari user, termasuk file baru
         $validated = $request->validate([
         'email' => 'required|email|unique:data_pelamar,email',

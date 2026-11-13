@@ -5,6 +5,26 @@
 @section('page-subtitle', 'Lihat posisi Anda dalam peringkat akhir seleksi.')
 
 @section('content')
+@if (!config('beasiswa.pendaftaran_dibuka'))
+    <div class="card border-0 p-4 p-md-5 text-center mx-auto" style="max-width: 640px;">
+        <div class="mx-auto mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
+             style="width: 64px; height: 64px; background-color: var(--sch-jade-light); color: var(--sch-jade);">
+            <i class="bi bi-megaphone-fill fs-3"></i>
+        </div>
+        <span class="d-block mb-2" style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; color: var(--sch-gold-deep);">
+            PENGUMUMAN SELEKSI
+        </span>
+        <h3 class="mb-2" style="color: var(--sch-navy);">Hasil Seleksi Belum Tersedia</h3>
+        <p class="mb-4" style="color: var(--sch-muted);">
+            Pendaftaran beasiswa belum dibuka, sehingga papan peringkat hasil seleksi belum dapat ditampilkan.
+        </p>
+        <div>
+            <a href="{{ route('pendafaran.user') }}" class="btn btn-primary px-4 py-2 rounded-pill">
+                <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+@else
 <style>
     /* === Menggunakan basis desain yang sama dengan halaman Admin === */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -239,4 +259,5 @@
     @endif
 
 </div>
+@endif
 @endsection

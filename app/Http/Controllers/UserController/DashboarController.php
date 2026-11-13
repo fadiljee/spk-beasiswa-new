@@ -171,7 +171,8 @@ class DashboarController extends Controller
 
 public function logout(Request $request)
 {
-    $request->session()->flush(); // ⬅️ hapus semua session
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
     return redirect()->route('user.beranda');
 }
 

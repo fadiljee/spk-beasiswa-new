@@ -115,6 +115,26 @@
 </style>
 
 @section('content')
+@if (!config('beasiswa.pendaftaran_dibuka'))
+    <div class="card border-0 p-4 p-md-5 text-center mx-auto" style="max-width: 640px;">
+        <div class="mx-auto mb-3 d-inline-flex align-items-center justify-content-center rounded-circle"
+             style="width: 64px; height: 64px; background-color: var(--sch-jade-light); color: var(--sch-jade);">
+            <i class="bi bi-megaphone-fill fs-3"></i>
+        </div>
+        <span class="d-block mb-2" style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; color: var(--sch-gold-deep);">
+            PENGUMUMAN PENDAFTARAN
+        </span>
+        <h3 class="mb-2" style="color: var(--sch-navy);">Pendaftaran Beasiswa Belum Dibuka</h3>
+        <p class="mb-4" style="color: var(--sch-muted);">
+            Saat ini periode pendaftaran beasiswa belum dibuka, sehingga formulir pendaftaran belum dapat diisi. Silakan pantau halaman beranda secara berkala untuk jadwal pembukaan terbaru.
+        </p>
+        <div>
+            <a href="{{ route('user.beranda') }}" class="btn btn-primary px-4 py-2 rounded-pill">
+                <i class="bi bi-arrow-left me-2"></i>Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+@else
 <div class="form-card">
     {{-- Notifikasi Error Global dari Laravel --}}
     @if ($errors->any())
@@ -297,6 +317,7 @@
     </div>
   </div>
 </div>
+@endif
 @endsection
 
 @push('scripts')

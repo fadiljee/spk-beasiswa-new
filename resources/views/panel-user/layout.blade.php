@@ -365,10 +365,12 @@
                 <i class="fas fa-user-plus nav-icon"></i>
                 <span>Pendaftaran</span>
             </a>
-            <a href="{{ route('hasil-akhir') }}" class="nav-link">
-                <i class="fas fa-trophy nav-icon"></i>
-                <span>Lihat Hasil</span>
-            </a>
+            @if (config('beasiswa.pendaftaran_dibuka'))
+                <a href="{{ route('hasil-akhir') }}" class="nav-link">
+                    <i class="fas fa-trophy nav-icon"></i>
+                    <span>Lihat Hasil</span>
+                </a>
+            @endif
             <a href="{{ route('profile.edit') }}" class="nav-link">
                 <i class="fas fa-user-cog nav-icon"></i>
                 <span>Edit Profil</span>
@@ -376,12 +378,13 @@
         </nav>
 
         <div class="sidebar-footer">
+            @php($displayName = session('mahasiswa_nama', Auth::user()->name ?? 'Peserta'))
             <div class="user-profile dropdown w-100">
                 <a href="#" class="dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'U') }}&background=0E6E63&color=fff" alt="User Avatar">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($displayName) }}&background=0E6E63&color=fff" alt="User Avatar">
                     <div class="user-info">
-                        <span class="user-name d-block">{{ Auth::user()->name ?? 'User' }}</span>
-                        <span class="user-role d-block">PESERTA BEASISWA</span>
+                        <span class="user-name d-block">{{ $displayName }}</span>
+                        <span class="user-role d-block">{{ session('mahasiswa_nim', 'PESERTA BEASISWA') }}</span>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark">
