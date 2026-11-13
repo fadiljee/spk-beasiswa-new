@@ -17,30 +17,28 @@ use App\Http\Controllers\dataPelamarController;
 use App\Http\Controllers\UserController\DashboarController;
 use App\Http\Middleware\LoginCheck;
 use App\Http\Middleware\LoggedIn;
+use App\Http\Middleware\MahasiswaAuth;
 use App\Http\Controllers\UserController\LoginController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', [LoginController::class, 'beranda'])->name('user.beranda');
-Route::get('/admin', function ( ) {
+Route::get('/admin', function () {
     return view('admin.login');
 });
-Route::get('/register', function () {
-    return view('user.register');
+
+// Panel User (wajib login mahasiswa)
+Route::middleware(MahasiswaAuth::class)->group(function () {
+    Route::get('/panel-user', [LoginController::class, 'dashboarduser'])->name('pendafaran.user');
+    Route::get('/panel-user/hasil-akhir', [PerhitunganController::class, 'hasilAkhirUser'])->name('hasil-akhir');
+    Route::get('/perhitungan/hasil-akhir/pdf', [PerhitunganController::class, 'exportPdf'])->name('perhitungan.hasil_akhir.pdf');
+    Route::get('/profile/edit', [LoginController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [LoginController::class, 'update'])->name('profile.update');
+    Route::get('user/pelamar/create', [dataPelamarController::class, 'create'])->name('user.pelamar.create');
+    Route::post('/pelamar', [dataPelamarController::class, 'store'])->name('pelamar.store');
 });
 
-// Panel User
-Route::get('/panel-user', [LoginController::class, 'dashboarduser'])->name('pendafaran.user');
-Route::get('/panel-user/hasil-akhir', [PerhitunganController::class, 'hasilAkhirUser'])->name('hasil-akhir');
 Route::post('/userlogout', [DashboarController::class, 'logout'])->name('user.logout');
-// Route::get('mahasiswa/edit', [DashboarController::class, 'edit'])->name('usermahasiswa.edit');
-// Route::put('mahasiswa/update/{id}', [DashboarController::class, 'update'])->name('usermahasiswa.update');
 
-   Route::get('/perhitungan/hasil-akhir/pdf', [PerhitunganController::class, 'exportPdf'])->name('perhitungan.hasil_akhir.pdf');
-
-// Route::get('/beranda', [LoginController::class, 'login'])->name('loginUser');
-// Route::post('/beranda', [LoginController::class, 'login'])->name('login');
-// Route::post('/register', [LoginController::class, 'register'])->name('registeruser');
-// routes/web.php
 Route::get('/loginuser', [LoginController::class, 'login'])->name('loginuser');
 Route::post('/loginproses', [LoginController::class, 'proseslogin'])->name('proseslogin');
 
@@ -48,17 +46,6 @@ Route::get('/register', [LoginController::class, 'register'])->name('register.us
 Route::post('/registerproses', [LoginController::class, 'registerProses'])->name('registerproses');
 
 Route::post('/logoutuser', [LoginController::class, 'logout'])->name('logoutuser');
-// Tampilkan form edit profile user (pastikan middleware auth atau session sudah jalan)
-Route::get('/profile/edit', [LoginController::class, 'edit'])->name('profile.edit');
-
-// Proses update data profile
-Route::post('/profile/update', [LoginController::class, 'update'])->name('profile.update');
-
-
-
-// form inputan
-Route::get('user/pelamar/create', [dataPelamarController::class, 'create'])->name('user.pelamar.create');
-Route::post('/pelamar', [dataPelamarController::class, 'store'])->name('pelamar.store');
 
 
 

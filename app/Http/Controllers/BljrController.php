@@ -28,6 +28,9 @@ class BljrController extends Controller
 
     public function login()
     {
+        if (session('loginStatus')) {
+            return redirect()->route('dashboardadmin');
+        }
         return view('admin.login');
     }
 
@@ -42,8 +45,9 @@ class BljrController extends Controller
         return redirect()->route('dashboardadmin');
     }
 
-    public function logout()
-    {   
+    public function logout(Request $request)
+    {
+        $request->session()->forget(['loginStatus', 'ambilUser']);
         return redirect()->route('loginadmin');
     }
 }

@@ -295,7 +295,62 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#testimonials">Testimoni</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('user.beranda') }}#apply">Cara Daftar</a></li>
                 </ul>
-                <a href="{{ route('loginuser') }}" class="btn btn-custom-primary ms-lg-3">Login / Daftar</a>
+                @if (session('mahasiswa_id'))
+                    <div class="dropdown ms-lg-3">
+                        <button class="btn btn-custom-primary dropdown-toggle d-inline-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                            <span>{{ session('mahasiswa_nama', 'Peserta') }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('pendafaran.user') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i>Dashboard Peserta
+                                </a>
+                            </li>
+                            @if (config('beasiswa.pendaftaran_dibuka'))
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('hasil-akhir') }}">
+                                        <i class="bi bi-trophy me-2"></i>Lihat Hasil
+                                    </a>
+                                </li>
+                            @endif
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('user.logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @elseif (session('loginStatus'))
+                    <div class="dropdown ms-lg-3">
+                        <button class="btn btn-custom-primary dropdown-toggle d-inline-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Admin</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('dashboardadmin') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i>Dashboard Admin
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('loginuser') }}" class="btn btn-custom-primary ms-lg-3">Login / Daftar</a>
+                @endif
             </div>
         </div>
     </nav>
