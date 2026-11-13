@@ -16,10 +16,23 @@ class Beasiswa extends Model
     'statistik_penerimaan', 'logo'
 ];
 
+    public function getLogoUrlAttribute(): ?string
+    {
+        if (!$this->logo) {
+            return null;
+        }
+
+        if (str_starts_with($this->logo, 'http://') || str_starts_with($this->logo, 'https://')) {
+            return $this->logo;
+        }
+
+        return asset('storage/logo/' . $this->logo);
+    }
+
     // Many-to-many ke DataPelamar
 public function beasiswas()
 {
-    return $this->belongsToMany(Beasiswa::class, 'data_pelamar_universitas', 'data_pelamar_id', 'universitas_beasiswa_id');
+    return $this->belongsToMany(Beasiswa::class, 'data_pelamar_universitas_beasiswa', 'data_pelamar_id', 'universitas_beasiswa_id');
 }
 public function universitas_beasiswa_1()
 {
@@ -27,7 +40,7 @@ public function universitas_beasiswa_1()
 }
 public function pelamars()
 {
-    return $this->belongsToMany(DataPelamar::class, 'data_pelamar_universitas', 'universitas_beasiswa_id', 'data_pelamar_id');
+    return $this->belongsToMany(DataPelamar::class, 'data_pelamar_universitas_beasiswa', 'universitas_beasiswa_id', 'data_pelamar_id');
 }
 
 public function universitas_beasiswa_2()

@@ -4,12 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDataPelamarTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('data_pelamar', function (Blueprint $table) {
             $table->id();
@@ -22,12 +22,9 @@ class CreateDataPelamarTable extends Migration
             $table->date('tanggal_lahir');
             $table->string('nomor_whatsapp');
             $table->text('alamat');
-            // Menambahkan kolom IPK
-            $table->decimal('ipk', 3, 2)->nullable();  // Tipe data decimal untuk IPK, misalnya 3.75
-            // Menambahkan kolom untuk menyimpan path file transkrip nilai
-            $table->string('transkrip_nilai_path')->nullable();  // Menyimpan path file transkrip nilai
-            // Menambahkan kolom untuk menyimpan path file ijazah
-            $table->string('ijazah_path')->nullable();  // Menyimpan path file ijazah
+            $table->decimal('ipk', 3, 2)->nullable();
+            $table->string('transkrip_nilai_path')->nullable();
+            $table->string('ijazah_path')->nullable();
             $table->string('cv_path')->nullable();
             $table->timestamps();
         });
@@ -36,8 +33,8 @@ class CreateDataPelamarTable extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('data_pelamar');
     }
-}
+};

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('subkriteria', function (Blueprint $table) {
+        Schema::create('subkriteria', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kriteria_id')->constrained('kriterias')->onDelete('cascade');
             $table->string('nama');
-            $table->integer('nilai');  // Nilai untuk subkriteria
+            $table->integer('nilai');
             $table->timestamps();
         });
     }

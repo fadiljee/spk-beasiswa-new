@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // database/migrations/xxxx_xx_xx_create_mahasiswa_table.php
-            Schema::create('mahasiswa', function (Blueprint $table) {
-                $table->id();
-                $table->string('nama');
-                $table->string('nim')->unique();
-                $table->string('email')->unique();
-                $table->string('password');
-                $table->string('jurusan');
-                $table->timestamps();
-            });
-
-        
+        Schema::create('mahasiswa', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('nim')->unique();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('jurusan');
+            $table->timestamps();
+        });
     }
 
     /**

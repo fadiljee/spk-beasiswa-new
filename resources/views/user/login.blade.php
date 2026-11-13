@@ -1,277 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login | Sistem Pendukung Keputusan</title>
+  <title>Masuk | INTACT Base Indonesia</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    /* === Base & Glassmorphism Background === */
+    :root {
+      --sch-navy:       #0E1A33;
+      --sch-paper:      #F6F5F1;
+      --sch-paper-2:    #FFFFFF;
+      --sch-ink:        #1A2133;
+      --sch-muted:      #5B6472;
+      --sch-border:     #E3E0D6;
+      --sch-jade:       #0E6E63;
+
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+    }
+
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1d2b64 0%, #0C91A6 100%);
+      font-family: var(--font-body);
+      background-color: var(--sch-paper);
+      color: var(--sch-ink);
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      overflow: hidden;
+      padding: 24px 16px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* === Container & Card === */
-    .login-container {
+    .login-shell {
       width: 100%;
-      max-width: 450px;
-      animation: fadeIn 0.8s ease-out forwards;
+      max-width: 430px;
+    }
+
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--sch-muted);
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: color 0.2s ease;
+    }
+    .back-home:hover {
+      color: var(--sch-navy);
     }
 
     .login-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      padding: 40px;
-      animation: slideUp 0.6s ease-out forwards;
-      color: #fff;
+      background: var(--sch-paper-2);
+      border: 1px solid var(--sch-border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 12px 32px -12px rgba(14, 26, 51, 0.14);
     }
 
-    /* === Logo & Header === */
-    .logo-container {
-      text-align: center;
-      margin-bottom: 30px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-out 0.3s forwards;
-    }
-
-    .logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 15px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 32px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo-text {
+    .login-brand {
+      font-family: var(--font-display);
       font-weight: 700;
-      font-size: 1.8rem;
-      color: #fff;
-      margin-bottom: 5px;
+      font-size: 1.5rem;
+      color: var(--sch-navy);
+      margin-bottom: 4px;
     }
 
-    .logo-subtext {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1rem;
-      font-weight: 400;
+    .login-subtitle {
+      font-size: 0.9rem;
+      color: var(--sch-muted);
+      margin-bottom: 24px;
     }
 
-    /* === Form Inputs === */
-    .form-group {
-      margin-bottom: 25px;
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--sch-ink);
+      margin-bottom: 6px;
+    }
+
+    .input-wrap {
       position: relative;
-      opacity: 0;
-      animation: slideUp 0.5s ease-out forwards;
-    }
-    .form-group:nth-of-type(1) { animation-delay: 0.4s; }
-    .form-group:nth-of-type(2) { animation-delay: 0.5s; }
-
-    .form-control {
-      height: 50px;
-      border-radius: 10px;
-      padding-left: 45px;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
-      transition: all 0.3s ease;
-      font-size: 15px;
-    }
-
-    .form-control:focus {
-      background: rgba(255, 255, 255, 0.25);
-      border-color: #fff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-      outline: none;
-    }
-
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.7);
     }
 
     .input-icon {
       position: absolute;
-      left: 15px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.7);
-      transition: color 0.3s ease;
+      color: var(--sch-muted);
+      pointer-events: none;
+      font-size: 1rem;
     }
 
-    .form-control:focus ~ .input-icon {
+    .form-control {
+      height: 46px;
+      border-radius: 10px;
+      padding-left: 42px;
+      padding-right: 42px;
+      background-color: var(--sch-paper-2);
+      border: 1px solid var(--sch-border);
+      color: var(--sch-ink);
+      font-size: 0.94rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--sch-jade);
+      box-shadow: 0 0 0 3px rgba(14, 110, 99, 0.14);
+      color: var(--sch-ink);
+    }
+
+    .form-control::placeholder {
+      color: #8A93A2;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: var(--sch-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .toggle-password:hover {
+      color: var(--sch-navy);
+      background-color: rgba(14, 26, 51, 0.06);
+    }
+
+    .btn-login {
+      background-color: var(--sch-navy);
+      border: 1px solid var(--sch-navy);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.72rem 1.25rem;
+      border-radius: 10px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-login:hover {
+      background-color: var(--sch-jade);
+      border-color: var(--sch-jade);
       color: #fff;
     }
 
-    /* === [FIX] Perbaikan Styling Tombol === */
-    .btn {
-      padding: 12px; /* Menggunakan padding agar tinggi fleksibel */
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-out forwards;
-      /* Dihapus: `height` dan `margin-top` agar diatur oleh d-grid */
-    }
-
-    /* Primary Button (Login) */
-    .btn-login {
-      background-color: #ffffff;
-      color: #0C91A6;
-      border: 2px solid #ffffff; /* Border dibuat sama dengan background */
-      animation-delay: 0.7s;
-    }
-
-    .btn-login:hover {
-      background-color: #f0f0f0;
-      border-color: #f0f0f0;
-      color: #0b7d8f;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    /* Secondary Button (Register) */
     .btn-register {
       background-color: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.5); /* Dibuat 2px agar tebalnya sama */
-      color: #fff;
-      animation-delay: 0.8s;
-    }
-
-    .btn-register:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-color: #fff;
-    }
-
-    /* === Alert & Links === */
-    .alert-danger {
-      background-color: rgba(220, 53, 69, 0.3);
-      border: 1px solid rgba(220, 53, 69, 0.5);
-      color: #fff;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 25px;
-    }
-
-    .forgot-password {
+      border: 1px solid var(--sch-border);
+      color: var(--sch-navy);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.72rem 1.25rem;
+      border-radius: 10px;
       text-align: center;
-      margin-top: 25px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-out 0.9s forwards;
-    }
-
-    .forgot-password a {
-      color: rgba(255, 255, 255, 0.8);
       text-decoration: none;
-      transition: color 0.3s ease;
-      font-size: 14px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-register:hover {
+      background-color: var(--sch-paper);
+      border-color: var(--sch-navy);
+      color: var(--sch-navy);
     }
 
-    .forgot-password a:hover {
-      color: #fff;
-      text-decoration: underline;
+    .alert-login-danger {
+      background-color: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #991B1B;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.875rem;
+      margin-bottom: 20px;
     }
 
-    .footer-text {
+    .login-footer {
       text-align: center;
-      margin-top: 30px;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 13px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-out 1s forwards;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--sch-muted);
     }
 
-    /* === Animations === */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive adjustments */
     @media (max-width: 576px) {
-      .login-card { padding: 30px 20px; }
-      .logo { width: 70px; height: 70px; font-size: 28px; }
+      .login-card { padding: 28px 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
+  <div class="login-shell">
+    <a href="{{ route('user.beranda') }}" class="back-home">
+      <i class="bi bi-arrow-left"></i>
+      <span>Kembali ke Beranda</span>
+    </a>
+
     <div class="login-card">
-      <div class="logo-container">
-        <div class="logo">
-          <i class="fas fa-brain"></i>
-        </div>
-        <h1 class="logo-text">SPK Login</h1>
-        <p class="logo-subtext">Sistem Pendukung Keputusan</p>
-      </div>
+      <h1 class="login-brand">Masuk</h1>
+      <p class="login-subtitle">INTACT Base Indonesia &middot; Beasiswa Taiwan</p>
 
       <form action="{{ route('proseslogin') }}" method="POST">
         @csrf
 
         @if ($errors->any())
-          <div class="alert alert-danger">
-            {{ $errors->first() }}
+          <div class="alert-login-danger" role="alert">
+            <i class="bi bi-exclamation-circle me-1"></i> {{ $errors->first() }}
           </div>
         @endif
 
-        <div class="form-group">
-          <input type="text" class="form-control" name="nim" placeholder="Nomor Induk Mahasiswa" value="{{ old('nim') }}" required>
-          <i class="fas fa-user input-icon"></i>
+        <div class="mb-3">
+          <label for="nim" class="form-label">Nomor Induk Mahasiswa (NIM)</label>
+          <div class="input-wrap">
+            <i class="bi bi-person-badge input-icon" aria-hidden="true"></i>
+            <input
+              type="text"
+              id="nim"
+              name="nim"
+              class="form-control"
+              placeholder="Contoh: 210100001"
+              value="{{ old('nim') }}"
+              autocomplete="username"
+              required
+              autofocus
+            >
+          </div>
         </div>
 
-        <div class="form-group">
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
-          <i class="fas fa-lock input-icon"></i>
+        <div class="mb-4">
+          <label for="password" class="form-label">Kata Sandi</label>
+          <div class="input-wrap">
+            <i class="bi bi-lock input-icon" aria-hidden="true"></i>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Masukkan kata sandi"
+              autocomplete="current-password"
+              required
+            >
+            <button
+              type="button"
+              class="toggle-password"
+              id="togglePassword"
+              aria-label="Tampilkan atau sembunyikan kata sandi"
+            >
+              <i class="bi bi-eye" id="toggleIcon"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="d-grid gap-3">
-          <button type="submit" class="btn btn-login">
-            <i class="fas fa-sign-in-alt me-2"></i> Masuk
-          </button>
-          <a href="{{ route('register.user') }}" class="btn btn-register">
-            Buat Akun Baru
-          </a>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-login">Masuk</button>
+          <a href="{{ route('register.user') }}" class="btn-register">Buat Akun Baru</a>
         </div>
       </form>
-
-
-      <div class="footer-text">
-        &copy; 2025 SPK. All rights reserved.
-      </div>
     </div>
+
+    <p class="login-footer">
+      &copy; {{ date('Y') }} INTACT Base Indonesia
+    </p>
   </div>
+
+  <script>
+    const toggleBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    if (toggleBtn && passwordInput && toggleIcon) {
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = passwordInput.type === 'password';
+        passwordInput.type = isHidden ? 'text' : 'password';
+        toggleIcon.className = isHidden ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+  </script>
 </body>
 </html>

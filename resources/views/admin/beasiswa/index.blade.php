@@ -391,8 +391,8 @@
               </td>
               <td>
                 <div class="logo-container">
-                  @if ($b->logo)
-                    <img src="{{ asset('storage/logo/' . $b->logo) }}" alt="Logo {{ $b->nama_universitas }}">
+                  @if ($b->logo_url)
+                    <img src="{{ $b->logo_url }}" alt="Logo {{ $b->nama_universitas }}">
                   @else
                     <div class="no-logo">
                       <i class="fas fa-image"></i><br>

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_pelamaruniversitas_beasiswa', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('data_pelamar_id')->constrained('data_pelamar')->onDelete('cascade');
-        $table->foreignId('universitas_beasiswa_id')->constrained('beasiswa')->onDelete('cascade');
-        $table->timestamps();
-});
-
+        Schema::create('data_pelamar_universitas_beasiswa', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('data_pelamar_id')->constrained('data_pelamar')->onDelete('cascade');
+            $table->foreignId('universitas_beasiswa_id')->constrained('beasiswa', indexName: 'dp_univ_beasiswa_univ_id_fk')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
