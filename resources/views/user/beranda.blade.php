@@ -300,7 +300,7 @@
             @foreach ($beasiswa as $b)
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="card program-card w-100">
-                    <div class="program-image-wrapper"><img src="{{ url('storage/logo/' . $b->logo) }}" alt="Logo {{ $b->nama_universitas }}" class="program-image"></div>
+                    <div class="program-image-wrapper"><img src="{{ $b->logo_url }}" alt="Logo {{ $b->nama_universitas }}" class="program-image"></div>
                     <div class="card-body p-4 d-flex flex-column">
                         <h5 class="card-title fw-bold">{{ $b->nama_universitas }}</h5>
                         <p class="card-text text-muted mb-4 flex-grow-1">{{ Str::limit($b->deskripsi, 100) }}</p>

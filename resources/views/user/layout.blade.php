@@ -118,6 +118,41 @@
             transform: translateY(-2px);
         }
 
+        /* Pagination matching Boarding Pass tokens */
+        .pagination {
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .pagination .page-link {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--sch-ink);
+            background-color: var(--sch-paper-2);
+            border: 1px solid var(--sch-border);
+            border-radius: 10px !important;
+            padding: 0.5rem 0.9rem;
+            min-width: 40px;
+            text-align: center;
+            transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+        }
+        .pagination .page-link:hover {
+            background-color: var(--sch-jade-light);
+            border-color: var(--sch-jade);
+            color: var(--sch-jade);
+        }
+        .pagination .page-item.active .page-link {
+            background-color: var(--sch-navy);
+            border-color: var(--sch-navy);
+            color: #fff;
+        }
+        .pagination .page-item.disabled .page-link {
+            background-color: var(--sch-paper);
+            border-color: var(--sch-border);
+            color: var(--sch-muted);
+            opacity: 0.65;
+        }
+
         /* =========================================================
            NAVBAR
            ========================================================= */
@@ -247,7 +282,6 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top" id="mainNavbar">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('user.beranda') }}">
-                <img src="{{ asset('img/icon.png') }}" alt="INTACT Base Logo" class="me-2">
                 INTACT Base<span class="brand-dot"></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">

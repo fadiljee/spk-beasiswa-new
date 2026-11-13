@@ -80,9 +80,9 @@
             <div class="invalid-feedback">{{ $message }}</div>
           @enderror
 
-          @if ($beasiswa->logo)
+          @if ($beasiswa->logo_url)
             <div class="mt-2">
-              <img src="{{ asset('storage/logo/' . $beasiswa->logo) }}" alt="Logo {{ $beasiswa->nama_universitas }}" width="100" height="100">
+              <img src="{{ $beasiswa->logo_url }}" alt="Logo {{ $beasiswa->nama_universitas }}" width="100" height="100">
             </div>
           @endif
         </div>

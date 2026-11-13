@@ -40,7 +40,7 @@ class DataPelamar extends Model
     // }
 public function beasiswas()
 {
-    return $this->belongsToMany(Beasiswa::class, 'data_pelamar_universitas', 'data_pelamar_id', 'universitas_beasiswa_id');
+    return $this->belongsToMany(Beasiswa::class, 'data_pelamar_universitas_beasiswa', 'data_pelamar_id', 'universitas_beasiswa_id');
 }
 
     // Hubungan dengan Penilaian

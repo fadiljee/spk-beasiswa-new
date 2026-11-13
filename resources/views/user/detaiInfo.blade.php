@@ -6,7 +6,7 @@
 <main class="container my-5" style="max-width: 800px;">
    {{-- Logo Universitas --}}
   <div class="text-center mb-4">
-    <img src="{{ asset('storage/logo/' . $beasiswa->logo) }}" alt="{{ $beasiswa->nama_universitas }}"
+    <img src="{{ $beasiswa->logo_url }}" alt="{{ $beasiswa->nama_universitas }}"
          style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
   </div>
 
