@@ -19,6 +19,7 @@
 *.sqlite3
 *credentials*.json
 *secret*.json
+/database/seeders/
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
